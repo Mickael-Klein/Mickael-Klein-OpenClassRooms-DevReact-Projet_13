@@ -19,11 +19,10 @@ export async function fetchDataService(type, data) {
         { headers: { "Content-Type": "application/json" } }
       );
       const responseData = await response.data;
-      console.log(responseData);
       return responseData;
     } catch (error) {
       const responseData = await error.response.data;
-      console.log(responseData);
+      console.log(error);
       store.dispatch({
         type: "user/fetchingRejected",
         payload: responseData.status,
@@ -39,11 +38,10 @@ export async function fetchDataService(type, data) {
       );
       const responseData = await response.data;
       responseData.token = data;
-      console.log(responseData);
       return responseData;
     } catch (error) {
       const responseData = await error.response.data;
-      console.log(responseData);
+      console.log(error);
       store.dispatch({
         type: "user/fetchingRejected",
         payload: responseData.status,
@@ -51,7 +49,6 @@ export async function fetchDataService(type, data) {
       return responseData;
     }
   } else if (type === "editUser") {
-    console.log(type);
     const dataToSend = { firstName: data.firstName, lastName: data.lastName };
     try {
       const response = await axios.put(
@@ -65,11 +62,10 @@ export async function fetchDataService(type, data) {
         }
       );
       const responseData = response.data;
-      console.log(responseData);
       return responseData;
     } catch (error) {
       const responseData = await error.response.data;
-      console.log(responseData);
+      console.log(error);
       return responseData;
     }
   }

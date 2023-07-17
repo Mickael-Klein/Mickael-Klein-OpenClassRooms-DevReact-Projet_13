@@ -60,7 +60,6 @@ export default function Login() {
 
     if (response.status === 200) {
       // Success
-      console.log(response);
       const isRememberChecked = document.querySelector("#remember-me").checked;
       sessionStorage.setItem("token", response.body.token);
       if (isRememberChecked) {

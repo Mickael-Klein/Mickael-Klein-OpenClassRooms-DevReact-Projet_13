@@ -46,10 +46,8 @@ function App() {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       dispatch({ type: "user/getUserInfo", payload: data });
       if (!sessionStorage.getItem("token")) {
-        console.log(data.token);
         sessionStorage.setItem("token", data.token);
       }
     }

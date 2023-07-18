@@ -130,7 +130,7 @@ paths:
           name: month
           description: month of transactions requested
           required: true
-          type: string
+          type: number
       produces:
         - application/json
       responses:

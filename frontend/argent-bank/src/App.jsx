@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import User from "./Page/User/User";
 import Login from "./Page/Login/Login";
 import NotFound from "./Page/NotFound/NotFound";
@@ -8,6 +8,7 @@ import Index from "./Page/Index/Index";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchDataService } from "./Service/fetchService";
+import { disconnectUser } from "./Feature/disconnectUser";
 
 function App() {
   const [data, setData] = useState(null);
@@ -16,6 +17,7 @@ function App() {
   const connected = useSelector((state) => state.user.connected);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // UseEffect
   useEffect(() => {
@@ -45,7 +47,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.status === 401) {
+      // If token was expired, disconnect user from app and remove token
+      disconnectUser();
+      navigate("/");
+    }
+    if (data && data.status === 200) {
       dispatch({ type: "user/getUserInfo", payload: data });
       if (!sessionStorage.getItem("token")) {
         sessionStorage.setItem("token", data.token);

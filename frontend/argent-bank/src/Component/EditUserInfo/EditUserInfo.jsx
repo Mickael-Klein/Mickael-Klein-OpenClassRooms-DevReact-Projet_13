@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./EditUserInfo.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataService } from "../../Service/fetchService";
+import { useNavigate } from "react-router-dom";
+import { disconnectUser } from "../../Feature/disconnectUser";
 
 export default function EditUserInfo() {
   const [firstName, setFirstName] = useState("");
@@ -13,6 +15,7 @@ export default function EditUserInfo() {
   const token = useSelector((state) => state.user.data.token);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const firstNameFormInput = document.querySelector("#firstName");
   const lastNameFormInput = document.querySelector("#lastName");
@@ -78,15 +81,15 @@ export default function EditUserInfo() {
       token: token,
     });
 
-    console.log(response);
-
     if (response.status === 200) {
       dispatch({ type: "user/editUser", payload: response });
+    } else if (response.status === 401) {
+      disconnectUser();
+      navigate("/");
     } else {
       dispatch({ type: "user/fetchingRejected", payload: response });
+      dispatch({ type: "editUser/toogleEditing" });
     }
-
-    dispatch({ type: "editUser/toogleEditing" });
   }
 
   return (

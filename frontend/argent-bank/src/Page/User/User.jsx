@@ -3,6 +3,7 @@ import EditUserInfo from "../../Component/EditUserInfo/EditUserInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchDataService } from "../../Service/fetchService";
+import { disconnectUser } from "../../Feature/disconnectUser";
 
 export default function User() {
   const [data, setData] = useState(null);
@@ -35,11 +36,16 @@ export default function User() {
   }, []);
 
   useEffect(() => {
-    if (data && !fullProfile) {
+    if (data && data.status === 401) {
+      disconnectUser();
+      navigate("/");
+    }
+    if (data && data.status === 200 && !fullProfile) {
       dispatch({ type: "user/getUserInfo", payload: data });
       if (!sessionStorage.getItem("token")) {
         sessionStorage.setItem("token", token);
       }
+      setData(null);
     } // eslint-disable-next-line
   }, [data, dispatch, token]);
 
